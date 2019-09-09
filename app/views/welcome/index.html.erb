@@ -1,0 +1,120 @@
+
+
+<h2 align="right" id="notice"><%= notice %></h2>
+<% if user_signed_in? and current_user.position == 'Admin'%>
+
+	<h2>
+	 <div align="right">
+        <% if can? :manage, Project %>
+           <%= link_to 'New Project', new_project_path, :class => 'navbar-link' %>
+           <%= link_to 'Add Team', new_team_path, :class => 'navbar-link' %>
+        <%end%>
+     </div>
+    </h2>
+
+
+
+	<h1>Developers In Action</h1>
+
+  <table style="width:100%">
+   
+      <thead>
+         <tr>
+      	<% @users.collect do |u| %> 
+      	  <% if u.position == 'DevOps' %>
+            <th><%=u.id%>.  Developer <%= u.name %> </th>           
+        </tr>
+
+       </thead>
+
+        <tbody> 
+           <tr> 
+           <% @projects.each do |up|%>
+           	<td><%= up.name %>. <%= up.user_ids %><i> is </i><%= up.user_ids.include? u.id %></td>
+
+
+
+             <% if  up.user_ids.include? u.id == "true"  %>
+            	<%  if up.status == 'New' %>
+            		 <td> <%=up.status %></td>
+             	<% elsif up.status == 'In Progress' %>
+             		<td> <%=up.status %></td>
+             	<% elsif up.status == 'Done' %>
+             		<td> <%=up.status %></td>
+             	<%end%>
+
+              <td><%= up.name %></td>
+              <%end%>
+            <%end%>
+          <%end%>
+
+        
+          </tr>
+         <%end%>
+        </tbody>
+        <style> table, th, td {  border: 1px solid black;  border-collapse: collapse; }</style>
+  </table>
+
+
+  <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', 'Count');
+        data.addRows([
+          ['New', 5],
+          ['In Progress', 3],
+          ['Done', 1]
+        ]);
+
+        // Set chart options
+        var options = {'title':'Developers In Action',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+<div id="chart_div"></div>
+
+  <% elsif %>
+  <h2><i>Hellow <%=current_user.name%> !</i></h2>
+  <table  border="1">
+  <% @projects.map do |p| %>
+   <p><%=p.user_ids.include? current_user.id%></p>
+    <%if p.user_ids.include? current_user.id == 'true' %>
+  	<thead>
+  		<tr>
+  			<th>Title</th>
+  			<th>Descripton</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+  		<tr>
+  			<td>p.id</td>
+  			<td>p.description</td>
+  		</tr>
+  	</tbody>
+  	<%end%>
+  <%end%>
+  </table>
+  <h3><i>Find a way As Admin</i></h3>
+  	
+<% end %>

@@ -1,0 +1,59 @@
+<%= form_with(model: project, local: true) do |form| %>
+  <% if project.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+      <% project.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+      <div class="field">
+        <div class="control">
+          <%= form.label :title %>
+          <%= form.text_field :title %>
+          <%= form.label :name %>
+          <%= form.text_field :name %>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <%= form.label :description %>
+          <%= form.text_area :description%>
+        </div>
+        <div class="select">
+          <%= form.select :team_id, options_for_select(@teams.collect{ |u| [u.name, u.id] }), {:prompt => 'Select Team'}  %>
+        </div>
+         <div class="field">
+          <%= form.label "Assign Developers" %>
+          <select data-placeholder="click and add Developers" multiple="multiple" class="chosen-select" 
+            name="project[user_ids][]">    
+           <% @users.collect do |u| %> 
+             <option value=<%= u.id %> > 
+                <%= u.name %> 
+             </option>              
+           <% end %>
+          </select>
+          <div>
+            <select name="project[status]">
+             <option value="New">New</option>
+             <option value="In Progress">In Progress</option>
+             <option value="Done">Done</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if can? :manage, Project %>
+    <%= form.submit %>
+    <% end%>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+  <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+  <script type="text/javascript">$(".chosen-select").chosen({  no_results_text: "Oops, nothing found!"})</script>
+<% end %>
