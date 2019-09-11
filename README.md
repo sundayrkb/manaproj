@@ -2,7 +2,21 @@
 
 Rails application for managing projects 
 
-User-Team-Projects 
+Employee-Team-Projects 
+
+Roles : Admin, Developer
+
+As Admin:
+
+|| Able to create a project.
+|| Able to Create a List Of TODO item for Project.
+|| Able to Assign to Developer.
+|| Able to Add Mutliple Developer To Projects.
+
+As Developer
+
+|| Able t See a TODO list For particular Developer.
+|| Able to mark as "New, In Progress, Done" for project.
 
 
 gem list : Devise, Cancancan
