@@ -1,60 +1,75 @@
 
 
 <h2 align="right" id="notice"><%= notice %></h2>
-<% if user_signed_in? and current_user.position == 'Admin'%>
 
 	<h2>
-	 <div align="right">
-        <% if can? :manage, Project %>
-           <%= link_to 'New Project', new_project_path, :class => 'navbar-link' %>
-           <%= link_to 'Add Team', new_team_path, :class => 'navbar-link' %>
-        <%end%>
-     </div>
-    </h2>
-
-
+	  <div align="right">
+      <% if can? :manage, Project %>
+        <%= link_to 'Project', projects_path, :class => 'navbar-link' %>
+        <%= link_to 'Team', teams_path, :class => 'navbar-link' %>
+      <%end%>
+    </div>
+  </h2>
+<% if user_signed_in? and current_user.position == 'Admin'%>
 
 	<h1>Developers In Action</h1>
 
-  <table style="width:100%">
-   
-      <thead>
-         <tr>
-      	<% @users.collect do |u| %> 
-      	  <% if u.position == 'DevOps' %>
-            <th><%=u.id%>.  Developer <%= u.name %> </th>           
-        </tr>
-
-       </thead>
-
-        <tbody> 
-           <tr> 
-           <% @projects.each do |up|%>
-           	<td><%= up.name %>. <%= up.user_ids %><i> is </i><%= up.user_ids.include? u.id %></td>
-
-
-
-             <% if  up.user_ids.include? u.id == "true"  %>
-            	<%  if up.status == 'New' %>
-            		 <td> <%=up.status %></td>
-             	<% elsif up.status == 'In Progress' %>
-             		<td> <%=up.status %></td>
-             	<% elsif up.status == 'Done' %>
-             		<td> <%=up.status %></td>
-             	<%end%>
-
-              <td><%= up.name %></td>
-              <%end%>
+  <table style="width:100%">   
+    <thead>
+      <tr>
+        <th>Status</th>
+      	  <% @users.map do |u| %> 
+            <% if u.position == 'DevOps' %>
+              <th><%=u.id%>.  Developer <%= u.name %> </th> 
             <%end%>
-          <%end%>
-
-        
+          <%end%>          
+      </tr>
+    </thead>
+    <tbody>  
+      <% @projects.group(:status).each do |p|%>
+        <tr> 
+         	<td><%= p.status %></td>       
+            <% @users.collect do |u| %> 
+            <% if u.position == 'DevOps' %> 
+              <td>
+                <% u.projects.each do |up| %> 
+                  <% if up.user_ids.include? u.id and p.status == up.status %>                    
+                      <ul> Project                   
+                       <%=up.id%>. <%=up.name %>
+                      </ul>              
+                  <%end%>
+                <%end%>
+              </td>                
+            <%end%>  
+            <%end%>     
           </tr>
-         <%end%>
-        </tbody>
-        <style> table, th, td {  border: 1px solid black;  border-collapse: collapse; }</style>
+        <%end%>
+    </tbody>
+    <style> table, th, td {  border: 1px solid black;  border-collapse: collapse; }</style>
   </table>
-
+<% elsif %>
+  <h2><i>Hellow <%=current_user.name%> !</i></h2>
+  <table  border="1">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Descripton</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% current_user.projects.map do |p| %>
+        <tr>
+          <td>Project <%= p.title %></td>
+          <td><%= p.description %></td>
+          <td><%= p.status %></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  <h3><i>  away As Admin</i></h3>
+    
+<% end %>
 
   <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -94,27 +109,4 @@
     </script>
 <div id="chart_div"></div>
 
-  <% elsif %>
-  <h2><i>Hellow <%=current_user.name%> !</i></h2>
-  <table  border="1">
-  <% @projects.map do |p| %>
-   <p><%=p.user_ids.include? current_user.id%></p>
-    <%if p.user_ids.include? current_user.id == 'true' %>
-  	<thead>
-  		<tr>
-  			<th>Title</th>
-  			<th>Descripton</th>
-  		</tr>
-  	</thead>
-  	<tbody>
-  		<tr>
-  			<td>p.id</td>
-  			<td>p.description</td>
-  		</tr>
-  	</tbody>
-  	<%end%>
-  <%end%>
-  </table>
-  <h3><i>Find a way As Admin</i></h3>
-  	
-<% end %>
+  

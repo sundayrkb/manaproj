@@ -10,7 +10,8 @@
       <th>Name</th>
       <th>Description</th>
       <th>Team ID</th>
-      <th>Users IDs</th>
+      <!-- <th>Users IDs</th> -->
+      <th>Developers Name</th>
       <th>Status</th>
       <th colspan="3">Take Action</th>
     </tr>
@@ -24,7 +25,13 @@
         <td><%= project.name %></td>
         <td><%= project.description %></td>
         <td><%= project.team_id %></td>
-        <td><%= project.user_ids %> </td>
+        <!-- <td><%= project.user_ids %> </td> -->
+        <td>
+         <% @users.find(project.user_ids).each do |ui|%>
+         <ul> <%= ui.id %>. <%= ui.name %></ul>
+         <%end%>
+         </td>
+
         <td><%= project.status %></td>
         
         <td><%= link_to 'Show', project %></td>
