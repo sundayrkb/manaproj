@@ -4,7 +4,7 @@
         <th>Status</th>
       	  <% @users.map do |u| %> 
             <% if u.position == 'DevOps' %>
-              <th><%=u.id%>.  Developer <%= u.name %> </th> 
+              <th><%=u.id%>.  Developer <%= u.name.upcase %> </th> 
             <%end%>
           <%end%>          
       </tr>

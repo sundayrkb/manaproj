@@ -23,13 +23,13 @@
       <tr>
         <td><%= project.id %></td>
         <td><%= project.title %></td>
-        <td><%= project.name %></td>
+        <td><%= project.name.upcase %></td>
         <td><%= project.description %></td>
         <td><%= project.team_id %></td>
         <!-- <td><%= project.user_ids %> </td> -->
         <td>
          <% @users.find(project.user_ids).each do |ui|%>
-         <ul> <%= ui.id %>. <%= ui.name %></ul>
+         <ul> <%= ui.id %>. <%= ui.name.upcase %></ul>
          <%end%>
          </td>
 

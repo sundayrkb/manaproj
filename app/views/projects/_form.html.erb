@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <% if can? :manage || :update, Project %>
+    <% if can? :manage, Project %>
     <%= form.submit %>
     <% end%>
   </div>
