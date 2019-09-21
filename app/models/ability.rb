@@ -3,12 +3,13 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  Roles = [ "User", "Admin" , "DevOps" ]
+
+  def initialize(current_user)
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
-      if user.present? && user.position == 'Admin'
-        puts ".............abilities"
+      if current_user.present? && current_user.position == 'Admin'
         can :manage, :all
       else
         can :read, :all

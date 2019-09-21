@@ -4,8 +4,12 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
-    @users= User.all
+    if current_user.position == 'Admin'
+     @projects = Project.all
+    else
+     @projects = current_user.projects
+    end
+     @users= User.all
   end
 
   # GET /projects/1
@@ -36,8 +40,6 @@ class ProjectsController < ApplicationController
     @teams = Team.all
     @users = User.all
     @project = current_user.projects.build(project_params)
-    puts "-------------------"
-    puts @project.inspect
     @teams = Team.all
 
     respond_to do |format|
@@ -56,8 +58,6 @@ class ProjectsController < ApplicationController
   def update
     @teams = Team.all
     @users = User.all
-    puts "=========================update"
-    puts project_params.inspect
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
@@ -87,9 +87,6 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      puts "================pp======================"
-      puts current_user.inspect
-      puts "================ppp======================"
       #params.fetch(:project, {})
       params.require(:project).permit(:title, :name, :description, :team_id, :status, user_ids:[])
       #params.require(:project).permit(:title, :name, :description, :team_id, :user_id)

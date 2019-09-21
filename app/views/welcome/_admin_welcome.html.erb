@@ -1,0 +1,33 @@
+<table style="width:100%">   
+  <thead>
+      <tr>
+        <th>Status</th>
+      	  <% @users.map do |u| %> 
+            <% if u.position == 'DevOps' %>
+              <th><%=u.id%>.  Developer <%= u.name %> </th> 
+            <%end%>
+          <%end%>          
+      </tr>
+  </thead>
+    <tbody>  
+      <% @projects.group(:status).each do |p|%>
+        <tr> 
+         	<td><%= p.status %></td>       
+            <% @users.collect do |u| %> 
+            <% if u.position == 'DevOps' %> 
+              <td>
+                <% u.projects.each do |up| %> 
+                  <% if up.user_ids.include? u.id and p.status == up.status %>                    
+                      <ul> Project                   
+                       <%=up.id%>. <%=up.name %>
+                      </ul>              
+                  <%end%>
+                <%end%>
+              </td>                
+            <%end%>  
+            <%end%>     
+          </tr>
+        <%end%>
+    </tbody>
+    <style> table, th, td {  border: 1px solid black;  border-collapse: collapse; }</style>
+</table>

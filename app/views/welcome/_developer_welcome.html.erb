@@ -1,0 +1,40 @@
+<table style="width:100%">   
+  <thead>
+      <tr>
+        <th>Status</th>
+      	  <% current_user.projects.map do |ps| %> 
+              <th><%=ps.id%>.  Project <%= ps.name %> </th> 
+          <%end%>          
+      </tr>
+  </thead>
+    <tbody>  
+      <% @projects.group(:status).each do |p|%>
+        <tr> 
+         	<td><%= p.status %></td> 
+            <% current_user.projects.map do |ups|%>      
+             <td>
+             <% if ups.user_ids.include? current_user.id and p.status == ups.status and ups.status != 'Done'%>                    
+                <ul> Description :                   
+                  <%=ups.description %> |
+            <select name="project[status]">
+             <option value="In Progress">In Progress</option>
+             <option value="Done">Done</option>
+            </select>
+            <%= link_to 'Update', edit_project_path(p.id) %>
+                </ul>  
+              <%elsif ups.user_ids.include? current_user.id and p.status == ups.status and ups.status == 'Done'%>
+                <ul>   
+                 <%=ups.description %>
+                </ul>  
+              <%elsif%>
+                <ul>               
+                  none 
+                </ul>                            
+              <%end%>
+            </td>
+            <%end%>   
+          </tr>
+        <%end%>
+    </tbody>
+    <style> table, th, td {  border: 1px solid black;  border-collapse: collapse; }</style>
+</table>

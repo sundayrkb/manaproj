@@ -16,7 +16,7 @@
 
   <div class="field">
     <%= f.label :position %><br />
-    <%= f.select :position, raw('<option value="DevOps">DevOps</option><option value="Admin">Admin</option>')%>
+    <%= f.select :position, Ability::Roles%>
   </div>
 
   <div class="field">
