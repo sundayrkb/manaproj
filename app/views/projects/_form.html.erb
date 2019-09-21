@@ -33,9 +33,11 @@
           <select data-placeholder="click and add Developers" multiple="multiple" class="chosen-select" 
             name="project[user_ids][]">    
            <% @users.collect do |u| %> 
+           <% if u.position == 'DevOps' %>
              <option value=<%= u.id %> > 
                 <%= u.name %> 
-             </option>              
+             </option> 
+           <%end%>             
            <% end %>
           </select>
           <div>
@@ -48,7 +50,7 @@
         </div>
       </div>
     </div>
-    <% if can? :manage, Project %>
+    <% if can? :manage || :update, Project %>
     <%= form.submit %>
     <% end%>
   </div>
